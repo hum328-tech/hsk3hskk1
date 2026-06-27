@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HSK 3 · Escucha, Repite y Produce</title>
+  <style>
+    :root{
+      --blue:#243B8F; --cyan:#17A7E8; --soft:#F4F8FF; --card:#fff;
+      --green:#24B47E; --yellow:#FFD85A; --red:#EF5B5B;
+      --text:#263238; --muted:#6b7280; --shadow:0 10px 25px rgba(20,40,90,.12);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#eef7ff,#fff);
+      color:var(--text);
+    }
+    header{
+      padding:16px 18px; background:#fff; position:sticky; top:0; z-index:20;
+      box-shadow:0 4px 14px rgba(0,0,0,.06);
+    }
+    .topbar{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;color:var(--blue);font-size:1.08rem}
+    .panda{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff3c4;font-size:1.55rem}
+    .scoreBox{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .pill{background:var(--soft);border:2px solid #d8ebff;border-radius:999px;padding:8px 13px;font-weight:800;color:var(--blue)}
+    main{max-width:1200px;margin:18px auto 90px;padding:0 18px}
+    .hero{
+      background:linear-gradient(135deg,#243B8F,#17A7E8);color:#fff;border-radius:28px;
+      padding:22px;box-shadow:var(--shadow);margin-bottom:18px
+    }
+    .hero h1{margin:0 0 6px;font-size:clamp(1.45rem,3vw,2.2rem)}
+    .hero p{margin:0;opacity:.95;font-size:1.02rem}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .tab{
+      border:0;border-radius:18px;padding:13px 15px;font-weight:900;font-size:.95rem;
+      background:#fff;color:var(--blue);box-shadow:var(--shadow);cursor:pointer;touch-action:manipulation
+    }
+    .tab.active{background:var(--yellow);color:#3b3000}
+    .section{display:none}.section.active{display:block}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+    .card,.panel{
+      background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:18px;border:2px solid #eef4ff
+    }
+    .wordChinese{font-size:2.1rem;font-weight:900;color:var(--blue);margin-bottom:8px}
+    .blurArea{
+      display:inline-block;filter:blur(6px);transition:.2s;user-select:none;background:#eef4ff;
+      border-radius:12px;padding:8px 10px;margin:3px 0;min-width:120px
+    }
+    .blurArea:hover,.card.showHelp .blurArea,.fragmentCard.showHelp .blurArea{filter:blur(0);user-select:auto;background:#e8fff4}
+    .small{color:var(--muted);font-size:.9rem;line-height:1.35}
+    .btnRow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+    button{
+      border:0;border-radius:16px;padding:12px 14px;font-weight:900;cursor:pointer;
+      font-size:.96rem;touch-action:manipulation
+    }
+    .listen{background:#e8f4ff;color:#0b4c8c}.record{background:var(--green);color:#fff}
+    .help{background:#fff3c4;color:#6d5200}.stop{background:#ffe7e7;color:#9c1d1d}
+    .primary{background:var(--blue);color:#fff}.check{background:#e8fff4;color:#087047}
+    .result{margin-top:12px;background:#f9fafb;border-radius:16px;padding:12px;min-height:44px;border:1px solid #e5e7eb}
+    .score{display:inline-flex;align-items:center;justify-content:center;min-width:68px;border-radius:999px;padding:7px 12px;font-weight:1000;background:#eef4ff;color:var(--blue);margin-left:6px}
+    .dialogBox{background:#fff;border-radius:26px;box-shadow:var(--shadow);padding:18px;margin-bottom:18px;border:2px solid #eef4ff}
+    .dialogHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .dialogHeader h2{margin:0;color:var(--blue)}
+    .fragmentGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+    .fragmentCard{border:2px solid #e8eefc;border-radius:20px;padding:16px;background:#fbfdff}
+    .speaker{font-weight:1000;color:var(--cyan);margin-bottom:7px}
+    .hiddenChinese{font-size:1.22rem;line-height:1.55;filter:blur(7px);transition:.2s;background:#eef4ff;border-radius:14px;padding:10px;user-select:none}
+    .fragmentCard.showHelp .hiddenChinese{filter:blur(0);user-select:auto;background:#fff}
+    .transcript{color:#111827;font-weight:700;margin-top:8px}
+    .progressBar{width:100%;height:16px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:10px}
+    .progressFill{width:0%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));transition:.3s}
+    .choiceGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px}
+    .choice{
+      background:#fff;border:3px solid #dbeafe;border-radius:20px;padding:18px;font-size:1.45rem;
+      min-height:76px;color:var(--blue)
+    }
+    .choice.correct{border-color:var(--green);background:#e8fff4}.choice.wrong{border-color:var(--red);background:#fff0f0}
+    .tokens{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    .token{background:#eef4ff;border:2px solid #d8ebff;border-radius:16px;padding:12px 14px;color:var(--blue)}
+    .dropzone{min-height:68px;background:#fff;border:3px dashed #c7ddff;border-radius:18px;padding:12px;display:flex;gap:10px;flex-wrap:wrap}
+    .inputLine{width:100%;border:3px solid #d8ebff;border-radius:16px;padding:14px;font-size:1.05rem}
+    footer{
+      position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;
+      padding:10px 16px;text-align:center;color:var(--muted);font-size:.86rem
+    }
+    @media(max-width:650px){
+      .topbar{align-items:flex-start;flex-direction:column}.scoreBox{justify-content:flex-start}
+      .wordChinese{font-size:1.8rem}button{width:100%}.btnRow{display:grid;grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand"><div class="panda">🐼</div><div>HSK 3 · Ruta oral completa</div></div>
+    <div class="scoreBox">
+      <div class="pill">⭐ Puntos: <span id="totalPoints">0</span></div>
+      <div class="pill">🎙️ Promedio: <span id="avgScore">0</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Lección interactiva · 周末、在家、旅游</h1>
+    <p>Secuencia: vocabulario → reconocimiento auditivo → shadowing → fragmentos → comprensión → reconstrucción → producción oral libre.</p>
+  </section>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showSection('vocab', this)">1 · Vocabulario</button>
+    <button class="tab" onclick="showSection('listening', this)">2 · Escucha y toca</button>
+    <button class="tab" onclick="showSection('shadowing', this)">3 · Shadowing</button>
+    <button class="tab" onclick="showSection('dialogs', this)">4 · Fragmentos</button>
+    <button class="tab" onclick="showSection('comprehension', this)">5 · Comprensión</button>
+    <button class="tab" onclick="showSection('rebuild', this)">6 · Reconstrucción</button>
+    <button class="tab" onclick="showSection('freeSpeech', this)">7 · Producción oral</button>
+  </div>
+
+  <section id="vocab" class="section active"><div class="grid" id="vocabGrid"></div></section>
+
+  <section id="listening" class="section">
+    <div class="panel">
+      <h2>Escucha y toca la palabra correcta</h2>
+      <p class="small">Entrena el oído antes de hablar. Primero reconoce el sonido; después lo pronuncias mejor.</p>
+      <div class="btnRow"><button class="primary" onclick="newListeningQuestion()">🔊 Nueva palabra</button></div>
+      <div id="listeningQuestion" class="result">Presiona “Nueva palabra”.</div>
+      <div id="listeningChoices" class="choiceGrid"></div>
+    </div>
+  </section>
+
+  <section id="shadowing" class="section">
+    <div class="panel">
+      <h2>Shadowing guiado</h2>
+      <p class="small">Paso 1: escucha. Paso 2: habla al mismo tiempo que el audio. Paso 3: repite sola.</p>
+      <div id="shadowingContainer"></div>
+    </div>
+  </section>
+
+  <section id="dialogs" class="section"><div id="dialogsContainer"></div></section>
+
+  <section id="comprehension" class="section">
+    <div class="panel">
+      <h2>Comprensión oral</h2>
+      <p class="small">Escucha el diálogo y responde. Aquí se evalúa si entiende la situación, no solo si repite sonidos.</p>
+      <div id="comprehensionContainer"></div>
+    </div>
+  </section>
+
+  <section id="rebuild" class="section">
+    <div class="panel">
+      <h2>Reconstrucción auditiva</h2>
+      <p class="small">Escucha la frase y ordena las partes. Esto ayuda a fijar estructura y memoria auditiva.</p>
+      <div id="rebuildContainer"></div>
+    </div>
+  </section>
+
+  <section id="freeSpeech" class="section">
+    <div class="panel">
+      <h2>Producción oral libre</h2>
+      <p class="small">Ahora la alumna contesta con sus propias palabras. La plataforma transcribe lo que dijo para revisión.</p>
+      <div id="freeSpeechContainer"></div>
+    </div>
+  </section>
+</main>
+
+<footer>Usar preferentemente Chrome/Edge. En iPhone, el reconocimiento de voz puede depender del navegador y permisos.</footer>
+
+<script>
+const vocabulary = [
+  {zh:"周末", py:"zhōumò", es:"fin de semana"},
+  {zh:"打算", py:"dǎsuàn", es:"planear; tener intención"},
+  {zh:"啊", py:"a", es:"partícula final"},
+  {zh:"跟", py:"gēn", es:"con"},
+  {zh:"一直", py:"yìzhí", es:"todo el tiempo"},
+  {zh:"游戏", py:"yóuxì", es:"juego"},
+  {zh:"作业", py:"zuòyè", es:"tarea"},
+  {zh:"着急", py:"zháojí", es:"preocupado; ansioso"},
+  {zh:"复习", py:"fùxí", es:"repasar"},
+  {zh:"南方", py:"nánfāng", es:"sur"},
+  {zh:"北方", py:"běifāng", es:"norte"},
+  {zh:"面包", py:"miànbāo", es:"pan"},
+  {zh:"带", py:"dài", es:"llevar; traer"},
+  {zh:"地图", py:"dìtú", es:"mapa"},
+  {zh:"搬", py:"bān", es:"mover; cargar"}
+];
+
+const dialogs = [
+  {
+    title:"1 · 谈周末的打算",
+    fullQuestion:"¿Qué quiere hacer Xiaogang el fin de semana?",
+    answer:"Invitar a Xiaoli a comer, ver una película y tomar café.",
+    options:["Invitar a Xiaoli a comer, ver una película y tomar café.","Hacer la tarea todo el día.","Viajar al norte."],
+    fragments:[
+      {speaker:"小丽", zh:"周末你有什么打算？", py:"Zhōumò nǐ yǒu shénme dǎsuàn?", es:"¿Qué planes tienes para el fin de semana?"},
+      {speaker:"小刚", zh:"我早就想好了，请你吃饭，看电影，喝咖啡。", py:"Wǒ zǎo jiù xiǎnghǎo le, qǐng nǐ chī fàn, kàn diànyǐng, hē kāfēi.", es:"Ya lo pensé: invitarte a comer, ver una película y tomar café."},
+      {speaker:"小丽 / 小刚", zh:"请我？是啊，我已经找好饭馆了，电影票也买好了。", py:"Qǐng wǒ? Shì a, wǒ yǐjīng zhǎohǎo fànguǎn le, diànyǐngpiào yě mǎihǎo le.", es:"¿Invitarme? Sí, ya encontré restaurante y compré los boletos."},
+      {speaker:"小丽", zh:"我还没想好要不要跟你去呢。", py:"Wǒ hái méi xiǎnghǎo yào bu yào gēn nǐ qù ne.", es:"Todavía no decido si quiero ir contigo."}
+    ]
+  },
+  {
+    title:"2 · 在家",
+    fullQuestion:"¿Por qué la mamá le llama la atención al hijo?",
+    answer:"Porque juega videojuegos y quiere asegurarse de que terminó la tarea y estudió.",
+    options:["Porque juega videojuegos y quiere asegurarse de que terminó la tarea y estudió.","Porque quiere viajar.","Porque no encuentra el mapa."],
+    fragments:[
+      {speaker:"妈妈", zh:"你一直玩儿电脑游戏，作业写完了吗？", py:"Nǐ yìzhí wánr diànnǎo yóuxì, zuòyè xiěwán le ma?", es:"Has estado jugando videojuegos. ¿Ya terminaste la tarea?"},
+      {speaker:"儿子", zh:"都写完了。", py:"Dōu xiěwán le.", es:"Ya terminé todo."},
+      {speaker:"妈妈", zh:"明天不是有考试吗？你怎么一点儿也不着急？", py:"Míngtiān bù shì yǒu kǎoshì ma? Nǐ zěnme yìdiǎnr yě bù zháojí?", es:"¿Mañana no tienes examen? ¿Por qué no estás nada preocupado?"},
+      {speaker:"儿子 / 妈妈", zh:"我早就复习好了。那也不能一直玩儿啊。", py:"Wǒ zǎo jiù fùxí hǎo le. Nà yě bù néng yìzhí wánr a.", es:"Ya repasé desde temprano. Aun así, no puedes jugar todo el tiempo."}
+    ]
+  },
+  {
+    title:"3 · 聊旅游计划",
+    fullQuestion:"¿Qué lugares comparan para viajar?",
+    answer:"El sur y el norte.",
+    options:["El sur y el norte.","La escuela y la casa.","El restaurante y el cine."],
+    fragments:[
+      {speaker:"小丽", zh:"下个月我去旅游，你能跟我一起去吗？", py:"Xià ge yuè wǒ qù lǚyóu, nǐ néng gēn wǒ yìqǐ qù ma?", es:"El próximo mes voy de viaje. ¿Puedes ir conmigo?"},
+      {speaker:"小刚", zh:"我还没想好呢。你觉得哪儿最好玩儿？", py:"Wǒ hái méi xiǎnghǎo ne. Nǐ juéde nǎr zuì hǎowánr?", es:"Todavía no lo decido. ¿Dónde crees que es más divertido?"},
+      {speaker:"小丽", zh:"南方啊，我们去年就是这个时候去的。", py:"Nánfāng a, wǒmen qùnián jiù shì zhège shíhou qù de.", es:"Al sur. El año pasado fuimos en esta época."},
+      {speaker:"小刚", zh:"南方太热了，北方好一些，不冷也不热。", py:"Nánfāng tài rè le, běifāng hǎo yìxiē, bù lěng yě bù rè.", es:"El sur es muy caluroso. El norte es mejor: ni frío ni caliente."}
+    ]
+  },
+  {
+    title:"4 · 准备去旅游",
+    fullQuestion:"¿Por qué Xiaogang dice que no deben llevar tanto?",
+    answer:"Porque van de viaje, no de mudanza.",
+    options:["Porque van de viaje, no de mudanza.","Porque no tienen tarea.","Porque el cine ya terminó."],
+    fragments:[
+      {speaker:"小刚", zh:"水果、面包、茶都准备好了，我们还带什么？", py:"Shuǐguǒ, miànbāo, chá dōu zhǔnbèi hǎo le, wǒmen hái dài shénme?", es:"Fruta, pan y té ya están listos. ¿Qué más llevamos?"},
+      {speaker:"小丽", zh:"手机、电脑、地图，一个也不能少。", py:"Shǒujī, diànnǎo, dìtú, yí ge yě bù néng shǎo.", es:"Celular, computadora y mapa. No puede faltar ninguno."},
+      {speaker:"小刚 / 小丽", zh:"这些我昨天下午就准备好了。再多带几件衣服吧。", py:"Zhèxiē wǒ zuótiān xiàwǔ jiù zhǔnbèi hǎo le. Zài duō dài jǐ jiàn yīfu ba.", es:"Eso lo preparé ayer por la tarde. Lleva unas prendas más."},
+      {speaker:"小刚", zh:"我们是去旅游，不是搬家，还是少带一些吧。", py:"Wǒmen shì qù lǚyóu, bú shì bānjiā, háishi shǎo dài yìxiē ba.", es:"Vamos de viaje, no de mudanza. Mejor llevemos menos."}
+    ]
+  }
+];
+
+const rebuildItems = [
+  {audio:"请你吃饭，看电影，喝咖啡。", parts:["请你吃饭","看电影","喝咖啡"]},
+  {audio:"你一直玩儿电脑游戏。", parts:["你","一直","玩儿电脑游戏"]},
+  {audio:"南方太热了，北方好一些。", parts:["南方太热了","北方","好一些"]},
+  {audio:"手机、电脑、地图，一个也不能少。", parts:["手机","电脑","地图","一个也不能少"]}
+];
+
+const freeQuestions = [
+  {q:"周末你有什么打算？", hint:"Puedes responder: 我周末想……"},
+  {q:"你喜欢南方还是北方？为什么？", hint:"Puedes responder: 我喜欢……，因为……"},
+  {q:"去旅游你要带什么？", hint:"Puedes responder: 我要带……"}
+];
+
+let totalPoints = 0, attempts = [], currentRecognition = null, currentListenTarget = null;
+
+function showSection(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  stopListening();
+}
+
+function speak(text, rate=.78){
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "zh-CN"; u.rate = rate; u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function normalizeChinese(text){
+  return (text || "").replace(/[，。！？、,.!?;；:\s]/g,"").replace(/儿/g,"").trim();
+}
+
+function similarity(a,b){
+  a = normalizeChinese(a); b = normalizeChinese(b);
+  if(!a || !b) return 0;
+  let matches = 0;
+  for(const ch of a){ if(b.includes(ch)) matches++; }
+  const lengthScore = Math.min(a.length,b.length) / Math.max(a.length,b.length);
+  return Math.round(((matches / a.length) * .75 + lengthScore * .25) * 100);
+}
+
+function feedback(score){
+  if(score >= 85) return "🌟 Excelente pronunciación.";
+  if(score >= 65) return "👍 Bien. Repite una vez más para mejorar ritmo y tonos.";
+  if(score >= 40) return "🙂 Vas bien. Escucha de nuevo y repite más lento.";
+  return "🎧 Escucha otra vez. Intenta decir solo una parte primero.";
+}
+
+function updateGlobal(score){
+  attempts.push(score);
+  totalPoints += Math.max(1, Math.round(score/10));
+  const avg = Math.round(attempts.reduce((a,b)=>a+b,0)/attempts.length);
+  document.getElementById("totalPoints").textContent = totalPoints;
+  document.getElementById("avgScore").textContent = avg;
+}
+
+function listenAndScore(target, resultId){
+  stopListening();
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const box = document.getElementById(resultId);
+  if(!SpeechRecognition){ box.innerHTML = "⚠️ Este navegador no permite reconocimiento de voz. Prueba Chrome o Edge."; return; }
+  const recognition = new SpeechRecognition();
+  currentRecognition = recognition;
+  recognition.lang = "zh-CN"; recognition.interimResults = false; recognition.continuous = false; recognition.maxAlternatives = 1;
+  box.innerHTML = "🎙️ Escuchando...";
+  recognition.onresult = (event)=>{
+    const transcript = event.results[0][0].transcript;
+    const score = similarity(target, transcript);
+    updateGlobal(score);
+    box.innerHTML = `
+      <div class="transcript">Lo que detectó: ${transcript}</div>
+      <div>Calificación: <span class="score">${score}/100</span></div>
+      <div>${feedback(score)}</div>
+      <div class="progressBar"><div class="progressFill" style="width:${score}%"></div></div>`;
+  };
+  recognition.onerror = ()=>{ box.innerHTML = "⚠️ No pude escuchar bien. Acércate al micrófono y vuelve a intentar."; };
+  recognition.onend = ()=>{ currentRecognition = null; };
+  recognition.start();
+}
+
+function stopListening(){
+  if(currentRecognition){ currentRecognition.stop(); currentRecognition = null; }
+}
+
+function toggleHelp(id){ document.getElementById(id).classList.toggle("showHelp"); }
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function renderVocabulary(){
+  const grid = document.getElementById("vocabGrid");
+  grid.innerHTML = vocabulary.map((w,i)=>`
+    <article class="card" id="wordCard${i}">
+      <div class="small">Palabra ${i+1}</div>
+      <div class="wordChinese">${w.zh}</div>
+      <div><span class="blurArea">${w.py}</span></div>
+      <div><span class="blurArea">${w.es}</span></div>
+      <div class="btnRow">
+        <button class="listen" onclick="speak('${w.zh}')">🔊 Escuchar</button>
+        <button class="record" onclick="listenAndScore('${w.zh}','wordResult${i}')">🎙️ Repetir</button>
+        <button class="help" onclick="toggleHelp('wordCard${i}')">👀 Apoyo</button>
+      </div>
+      <div class="result" id="wordResult${i}">Escucha primero, luego repite.</div>
+    </article>`).join("");
+}
+
+function newListeningQuestion(){
+  const target = vocabulary[Math.floor(Math.random()*vocabulary.length)];
+  currentListenTarget = target.zh;
+  const distractors = shuffle(vocabulary.filter(w=>w.zh!==target.zh)).slice(0,3);
+  const choices = shuffle([target,...distractors]);
+  document.getElementById("listeningQuestion").innerHTML = `🔊 Escucha la palabra y toca la tarjeta correcta.`;
+  speak(target.zh);
+  document.getElementById("listeningChoices").innerHTML = choices.map(w=>`
+    <button class="choice" onclick="checkListeningChoice(this,'${w.zh}')">${w.zh}<br><span class="small">${w.py}</span></button>
+  `).join("");
+}
+
+function checkListeningChoice(btn, zh){
+  if(!currentListenTarget) return;
+  if(zh === currentListenTarget){
+    btn.classList.add("correct"); totalPoints += 5; document.getElementById("totalPoints").textContent = totalPoints;
+  } else { btn.classList.add("wrong"); }
+}
+
+function renderShadowing(){
+  const container = document.getElementById("shadowingContainer");
+  const all = dialogs.flatMap(d=>d.fragments).slice(0,8);
+  container.innerHTML = `<div class="grid">` + all.map((f,i)=>`
+    <article class="card">
+      <div class="small">Shadowing ${i+1}</div>
+      <div class="wordChinese" style="font-size:1.35rem">${f.zh}</div>
+      <div class="small">${f.py}</div>
+      <div class="btnRow">
+        <button class="listen" onclick="speak('${f.zh.replace(/'/g,"\\'")}', .7)">1 🔊 Escuchar</button>
+        <button class="primary" onclick="speak('${f.zh.replace(/'/g,"\\'")}', .62)">2 🗣️ Hablar con el audio</button>
+        <button class="record" onclick="listenAndScore('${f.zh.replace(/'/g,"\\'")}','shadowResult${i}')">3 🎙️ Repetir sola</button>
+      </div>
+      <div class="result" id="shadowResult${i}">Haz los tres pasos en orden.</div>
+    </article>`).join("") + `</div>`;
+}
+
+function renderDialogs(){
+  const container = document.getElementById("dialogsContainer");
+  container.innerHTML = dialogs.map((d,di)=>{
+    const fullText = d.fragments.map(f=>f.zh).join(" ");
+    return `
+      <section class="dialogBox">
+        <div class="dialogHeader">
+          <h2>${d.title}</h2>
+          <button class="listen" onclick="speak('${fullText.replace(/'/g,"\\'")}', .72)">🔊 Escuchar diálogo completo</button>
+        </div>
+        <div class="small">Repite sin leer. Usa apoyo solo si lo necesitas.</div>
+        <div class="fragmentGrid">
+          ${d.fragments.map((f,fi)=>{
+            const id = `frag${di}_${fi}`, result = `fragResult${di}_${fi}`;
+            return `
+              <article class="fragmentCard" id="${id}">
+                <div class="speaker">${f.speaker}</div>
+                <div class="hiddenChinese">${f.zh}</div>
+                <div style="margin-top:8px"><span class="blurArea">${f.py}</span></div>
+                <div><span class="blurArea">${f.es}</span></div>
+                <div class="btnRow">
+                  <button class="listen" onclick="speak('${f.zh.replace(/'/g,"\\'")}', .72)">🔊 Escuchar</button>
+                  <button class="record" onclick="listenAndScore('${f.zh.replace(/'/g,"\\'")}','${result}')">🎙️ Repetir</button>
+                  <button class="help" onclick="toggleHelp('${id}')">👀 Revelar apoyo</button>
+                </div>
+                <div class="result" id="${result}">Repite el fragmento.</div>
+              </article>`;
+          }).join("")}
+        </div>
+      </section>`;
+  }).join("");
+}
+
+function renderComprehension(){
+  const c = document.getElementById("comprehensionContainer");
+  c.innerHTML = dialogs.map((d,i)=>{
+    const fullText = d.fragments.map(f=>f.zh).join(" ");
+    return `
+    <div class="card" style="margin-bottom:14px">
+      <h3>${d.title}</h3>
+      <div class="btnRow"><button class="listen" onclick="speak('${fullText.replace(/'/g,"\\'")}', .72)">🔊 Escuchar diálogo</button></div>
+      <p><b>${d.fullQuestion}</b></p>
+      <div class="choiceGrid">
+        ${shuffle(d.options).map(op=>`<button class="choice" onclick="checkComprehension(this, '${op.replace(/'/g,"\\'")}', '${d.answer.replace(/'/g,"\\'")}')">${op}</button>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function checkComprehension(btn, selected, answer){
+  if(selected === answer){ btn.classList.add("correct"); totalPoints += 5; document.getElementById("totalPoints").textContent = totalPoints; }
+  else btn.classList.add("wrong");
+}
+
+let rebuildState = {};
+function renderRebuild(){
+  const c = document.getElementById("rebuildContainer");
+  c.innerHTML = rebuildItems.map((item,i)=>{
+    const tokens = shuffle(item.parts);
+    return `
+      <div class="card" style="margin-bottom:14px">
+        <h3>Frase ${i+1}</h3>
+        <div class="btnRow"><button class="listen" onclick="speak('${item.audio.replace(/'/g,"\\'")}', .72)">🔊 Escuchar frase</button></div>
+        <div class="tokens" id="tokens${i}">
+          ${tokens.map(t=>`<button class="token" onclick="addToken(${i}, '${t}')">${t}</button>`).join("")}
+        </div>
+        <div class="dropzone" id="drop${i}"></div>
+        <div class="btnRow">
+          <button class="check" onclick="checkRebuild(${i})">✅ Revisar orden</button>
+          <button class="help" onclick="resetRebuild(${i})">🔄 Reiniciar</button>
+        </div>
+        <div class="result" id="rebuildResult${i}">Toca las partes en el orden correcto.</div>
+      </div>`;
+  }).join("");
+}
+
+function addToken(i,t){
+  if(!rebuildState[i]) rebuildState[i] = [];
+  rebuildState[i].push(t);
+  document.getElementById("drop"+i).innerHTML = rebuildState[i].map(x=>`<span class="token">${x}</span>`).join("");
+}
+
+function resetRebuild(i){
+  rebuildState[i] = [];
+  document.getElementById("drop"+i).innerHTML = "";
+  document.getElementById("rebuildResult"+i).innerHTML = "Toca las partes en el orden correcto.";
+}
+
+function checkRebuild(i){
+  const correct = rebuildItems[i].parts.join("|");
+  const current = (rebuildState[i] || []).join("|");
+  const box = document.getElementById("rebuildResult"+i);
+  if(current === correct){
+    box.innerHTML = "🌟 Correcto. La frase está bien ordenada.";
+    totalPoints += 8; document.getElementById("totalPoints").textContent = totalPoints;
+  } else box.innerHTML = "🙂 Casi. Escucha otra vez y revisa el orden.";
+}
+
+function renderFreeSpeech(){
+  const c = document.getElementById("freeSpeechContainer");
+  c.innerHTML = freeQuestions.map((q,i)=>`
+    <div class="card" style="margin-bottom:14px">
+      <h3>${q.q}</h3>
+      <p class="small">${q.hint}</p>
+      <div class="btnRow">
+        <button class="listen" onclick="speak('${q.q}', .72)">🔊 Escuchar pregunta</button>
+        <button class="record" onclick="freeListen('freeResult${i}')">🎙️ Responder</button>
+      </div>
+      <div class="result" id="freeResult${i}">Responde en chino. Se mostrará la transcripción detectada.</div>
+    </div>`).join("");
+}
+
+function freeListen(resultId){
+  stopListening();
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const box = document.getElementById(resultId);
+  if(!SpeechRecognition){ box.innerHTML = "⚠️ Este navegador no permite reconocimiento de voz."; return; }
+  const recognition = new SpeechRecognition();
+  currentRecognition = recognition;
+  recognition.lang = "zh-CN"; recognition.interimResults = false; recognition.continuous = false; recognition.maxAlternatives = 1;
+  box.innerHTML = "🎙️ Escuchando tu respuesta libre...";
+  recognition.onresult = (event)=>{
+    const transcript = event.results[0][0].transcript;
+    box.innerHTML = `<div class="transcript">Respuesta detectada: ${transcript}</div><div>✅ Revisión docente: confirmar si responde a la pregunta, si usa vocabulario de la lección y si los tonos son comprensibles.</div>`;
+    totalPoints += 10; document.getElementById("totalPoints").textContent = totalPoints;
+  };
+  recognition.onerror = ()=>{ box.innerHTML = "⚠️ No pude escuchar bien. Intenta de nuevo."; };
+  recognition.onend = ()=>{ currentRecognition = null; };
+  recognition.start();
+}
+
+renderVocabulary();
+renderShadowing();
+renderDialogs();
+renderComprehension();
+renderRebuild();
+renderFreeSpeech();
+</script>
+</body>
+</html>
