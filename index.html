@@ -278,20 +278,62 @@ function normalizeChinese(text){
   return (text || "").replace(/[，。！？、,.!?;；:\s]/g,"").replace(/儿/g,"").trim();
 }
 
-function similarity(a,b){
-  a = normalizeChinese(a); b = normalizeChinese(b);
-  if(!a || !b) return 0;
-  let matches = 0;
-  for(const ch of a){ if(b.includes(ch)) matches++; }
-  const lengthScore = Math.min(a.length,b.length) / Math.max(a.length,b.length);
-  return Math.round(((matches / a.length) * .75 + lengthScore * .25) * 100);
+function similarity(target, transcript){
+
+  const targetClean = normalizeChinese(target);
+  const transcriptClean = normalizeChinese(transcript);
+
+  if(!targetClean || !transcriptClean) return 0;
+
+  let matched = 0;
+
+  for(const ch of targetClean){
+    if(transcriptClean.includes(ch)){
+      matched++;
+    }
+  }
+
+  // Porcentaje de caracteres reconocidos
+  let score = (matched / targetClean.length) * 100;
+
+  // Si captó el 70% o más, considerarlo prácticamente correcto
+  if(score >= 70){
+    score = 100;
+  }
+
+  return Math.round(score);
 }
 
+function flexibleSimilarity(target, transcript){
+  const a = normalizeChinese(target);
+  const b = normalizeChinese(transcript);
+
+  if(!a || !b) return 0;
+
+  let matched = 0;
+
+  for(const ch of a){
+    if(b.includes(ch)) matched++;
+  }
+
+  let baseScore = Math.round((matched / a.length) * 100);
+
+  if(baseScore >= 70) baseScore += 12;
+  else if(baseScore >= 55) baseScore += 10;
+  else if(baseScore >= 40) baseScore += 8;
+
+  const lengthRatio = Math.min(a.length, b.length) / Math.max(a.length, b.length);
+
+  if(lengthRatio >= 0.75) baseScore += 8;
+
+  return Math.min(100, baseScore);
+}
+  
 function feedback(score){
-  if(score >= 85) return "🌟 Excelente pronunciación.";
-  if(score >= 65) return "👍 Bien. Repite una vez más para mejorar ritmo y tonos.";
-  if(score >= 40) return "🙂 Vas bien. Escucha de nuevo y repite más lento.";
-  return "🎧 Escucha otra vez. Intenta decir solo una parte primero.";
+  if(score >= 80) return "🌟 Muy bien. Se entiende la frase.";
+  if(score >= 60) return "👍 Bien. La idea principal se entiende; repite una vez más para mejorar ritmo y tonos.";
+  if(score >= 40) return "🙂 Vas bien. Intenta decirla por partes.";
+  return "🎧 Escucha otra vez y repite solo el primer fragmento.";
 }
 
 function updateGlobal(score){
@@ -304,25 +346,79 @@ function updateGlobal(score){
 
 function listenAndScore(target, resultId){
   stopListening();
+
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const box = document.getElementById(resultId);
-  if(!SpeechRecognition){ box.innerHTML = "⚠️ Este navegador no permite reconocimiento de voz. Prueba Chrome o Edge."; return; }
+
+  if(!SpeechRecognition){
+    box.innerHTML = "⚠️ Este navegador no permite reconocimiento de voz. Prueba Chrome o Edge.";
+    return;
+  }
+
   const recognition = new SpeechRecognition();
   currentRecognition = recognition;
-  recognition.lang = "zh-CN"; recognition.interimResults = false; recognition.continuous = false; recognition.maxAlternatives = 1;
-  box.innerHTML = "🎙️ Escuchando...";
+
+  recognition.lang = "zh-CN";
+  recognition.interimResults = true;
+  recognition.continuous = true;
+  recognition.maxAlternatives = 3;
+
+  let finalTranscript = "";
+  let liveTranscript = "";
+  let silenceTimer = null;
+
+  box.innerHTML = "🎙️ Escuchando... habla con calma.";
+
   recognition.onresult = (event)=>{
-    const transcript = event.results[0][0].transcript;
+    liveTranscript = "";
+
+    for(let i = event.resultIndex; i < event.results.length; i++){
+      const text = event.results[i][0].transcript;
+
+      if(event.results[i].isFinal){
+        finalTranscript += text;
+      } else {
+        liveTranscript += text;
+      }
+    }
+
+    box.innerHTML = `
+      🎙️ Escuchando...
+      <div class="transcript">Detectando: ${finalTranscript}${liveTranscript}</div>
+    `;
+
+    clearTimeout(silenceTimer);
+
+    silenceTimer = setTimeout(()=>{
+      recognition.stop();
+    }, 2800);
+  };
+
+  recognition.onerror = ()=>{
+    box.innerHTML = "⚠️ No pude escuchar bien. Acércate al micrófono y vuelve a intentar.";
+  };
+
+  recognition.onend = ()=>{
+    currentRecognition = null;
+
+    const transcript = (finalTranscript + liveTranscript).trim();
+
+    if(!transcript){
+      box.innerHTML = "⚠️ No alcancé a escuchar la frase completa. Intenta otra vez hablando un poco más fuerte.";
+      return;
+    }
+
     const score = similarity(target, transcript);
     updateGlobal(score);
+
     box.innerHTML = `
       <div class="transcript">Lo que detectó: ${transcript}</div>
-      <div>Calificación: <span class="score">${score}/100</span></div>
+      <div>Calificación flexible: <span class="score">${score}/100</span></div>
       <div>${feedback(score)}</div>
-      <div class="progressBar"><div class="progressFill" style="width:${score}%"></div></div>`;
+      <div class="progressBar"><div class="progressFill" style="width:${score}%"></div></div>
+    `;
   };
-  recognition.onerror = ()=>{ box.innerHTML = "⚠️ No pude escuchar bien. Acércate al micrófono y vuelve a intentar."; };
-  recognition.onend = ()=>{ currentRecognition = null; };
+
   recognition.start();
 }
 
