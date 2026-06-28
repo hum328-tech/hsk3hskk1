@@ -385,12 +385,16 @@ function showListeningQuestion(){
   const choices = shuffle([target, ...distractors]);
 
   document.getElementById("listeningQuestion").innerHTML = `
-    🔊 Palabra ${listeningIndex + 1}/${listeningRound.length}
-    <br>
-    Escucha la palabra y toca la tarjeta correcta.
-  `;
+  🔊 Palabra ${listeningIndex + 1}/${listeningRound.length}
+  <br>
+  Escucha la palabra y toca la tarjeta correcta.
+  <br><br>
+  <button class="listen" onclick="speak('${target.zh}')">🔁 Repetir audio</button>
+`;
 
+  setTimeout(()=>{
   speak(target.zh);
+}, 250);
 
   document.getElementById("listeningChoices").innerHTML = choices.map(w=>`
     <button class="choice" onclick="checkListeningChoice(this,'${w.zh}')">
