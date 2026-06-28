@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK Oral · Escucha y Repite</title>
+<style>
+:root{
+  --bg:#0b1020;
+  --card:#172033;
+  --card2:#202b42;
+  --accent:#dc2626;
+  --gold:#facc15;
+  --blue:#38bdf8;
+  --green:#22c55e;
+  --text:#f8fafc;
+  --muted:#cbd5e1;
+  --line:rgba(255,255,255,0.12);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(220,38,38,0.25), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(250,204,21,0.15), transparent 32%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+header{
+  min-height:70vh;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:42px 20px;
+}
+.hero{
+  max-width:1050px;
+  padding:52px 38px;
+  border-radius:30px;
+  border:1px solid var(--line);
+  background:rgba(11,16,32,0.82);
+  box-shadow:0 30px 90px rgba(0,0,0,0.35);
+}
+.tag{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(220,38,38,0.15);
+  border:1px solid rgba(220,38,38,0.45);
+  color:#fecaca;
+  font-size:14px;
+  margin-bottom:18px;
+  font-weight:700;
+}
+h1{
+  font-size:clamp(38px,6vw,72px);
+  line-height:1.05;
+  margin:0 0 18px;
+  letter-spacing:-1.4px;
+}
+.yellow{color:var(--gold);}
+.subtitle{
+  max-width:850px;
+  margin:0 auto 30px;
+  color:var(--muted);
+  font-size:20px;
+}
+main{max-width:1180px;margin:auto;padding:30px 20px 90px;}
+section{margin:42px 0;}
+.section-title{font-size:34px;margin:0 0 12px;}
+.section-intro{color:var(--muted);max-width:860px;margin-bottom:26px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;}
+.card,.lab{
+  background:rgba(23,32,51,0.92);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.2);
+}
+.lab{
+  background:linear-gradient(135deg, rgba(23,32,51,0.98), rgba(11,16,32,0.98));
+  border-radius:30px;
+  padding:32px;
+}
+button{
+  border:none;
+  border-radius:16px;
+  padding:13px 18px;
+  cursor:pointer;
+  font-weight:800;
+  font-size:15px;
+  transition:.2s ease;
+}
+.btn-primary{background:var(--accent);color:white;}
+.btn-secondary{background:rgba(255,255,255,0.08);color:white;border:1px solid var(--line);}
+.btn-blue{background:var(--blue);color:#06111f;}
+.btn-green{background:var(--green);color:#06111f;}
+button:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.exam-card{
+  min-height:220px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.exam-title{font-size:28px;font-weight:900;margin-bottom:6px;}
+.exam-count{color:var(--gold);font-weight:900;margin-bottom:12px;}
+.chip{
+  display:inline-block;
+  padding:8px 13px;
+  border-radius:999px;
+  background:rgba(56,189,248,0.14);
+  color:#bae6fd;
+  border:1px solid rgba(56,189,248,0.35);
+  font-size:14px;
+  font-weight:700;
+  margin:4px 4px 4px 0;
+}
+.screen{display:none;}
+.screen.active{display:block;}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.sentence-list{display:grid;gap:18px;}
+.sentence-card{
+  display:grid;
+  grid-template-columns:48px 1fr auto;
+  gap:16px;
+  align-items:center;
+  background:var(--card2);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:18px;
+}
+.num{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:rgba(255,255,255,0.08);
+  color:var(--gold);
+  font-weight:900;
+}
+.hanzi{
+  font-size:clamp(25px,4vw,38px);
+  font-weight:900;
+  line-height:1.35;
+}
+.hidden-help{
+  margin-top:8px;
+  display:grid;
+  gap:6px;
+}
+.blur-text{
+  color:#e5e7eb;
+  filter:blur(6px);
+  user-select:none;
+  transition:.18s ease;
+  cursor:help;
+  display:inline-block;
+  max-width:100%;
+}
+.blur-text:hover,
+.blur-text:focus{
+  filter:blur(0);
+  user-select:text;
+}
+.label{
+  color:#94a3b8;
+  font-size:13px;
+  margin-right:6px;
+  font-weight:800;
+}
+.controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.result{
+  grid-column:2 / 4;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:12px 14px;
+  border-radius:16px;
+  min-height:44px;
+}
+.status-good{color:#bbf7d0;font-weight:900;}
+.status-mid{color:#fde68a;font-weight:900;}
+.status-bad{color:#fecaca;font-weight:900;}
+footer{text-align:center;color:var(--muted);padding:30px 20px 60px;}
+@media(max-width:720px){
+  .hero,.lab{padding:28px 20px;}
+  .sentence-card{grid-template-columns:1fr;}
+  .result{grid-column:1;}
+  .controls{justify-content:flex-start;}
+  button{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero">
+    <div class="tag">HSK Oral · Escucha y repite</div>
+    <h1>Práctica oral con <span class="yellow">pinyin oculto</span></h1>
+    <p class="subtitle">
+      El alumno escucha la oración, repite la misma oración y consulta pinyin o español solo al pasar el cursor encima.
+    </p>
+    <a href="#examenes"><button class="btn-primary">Iniciar práctica</button></a>
+  </div>
+</header>
+
+<main>
+  <section id="examenes" class="screen active">
+    <h2 class="section-title">Elige un examen</h2>
+    <p class="section-intro">Cada examen tiene 15 oraciones. El hanzi queda visible; el pinyin y español están borrosos para no dar la respuesta durante la repetición.</p>
+    <div id="examGrid" class="grid"></div>
+  </section>
+
+  <section id="practice" class="screen">
+    <div class="topbar">
+      <div>
+        <h2 id="practiceTitle" class="section-title">Examen</h2>
+        <p class="section-intro">Botón azul: escuchar. Botón verde: repetir la misma oración. Pasa el cursor sobre pinyin o español para consultarlo.</p>
+      </div>
+      <button class="btn-secondary" onclick="showScreen('examenes')">Volver a exámenes</button>
+    </div>
+
+    <div class="lab">
+      <div class="sentence-list" id="sentenceList"></div>
+    </div>
+  </section>
+</main>
+
+<footer>HSK Oral · Escuchar, repetir y verificar</footer>
+
+<script>
+const exams = [
+  {
+    "title": "Primer examen",
+    "sentences": [
+      {
+        "hanzi": "认识你很高兴",
+        "pinyin": "rènshi nǐ hěn gāoxìng",
+        "spanish": "Mucho gusto en conocerte."
+      },
+      {
+        "hanzi": "出租车来了",
+        "pinyin": "chūzūchē lái le",
+        "spanish": "Llegó el taxi."
+      },
+      {
+        "hanzi": "他们在打电话呢",
+        "pinyin": "tāmen zài dǎ diànhuà ne",
+        "spanish": "Ellos están hablando por teléfono."
+      },
+      {
+        "hanzi": "北京昨天没下雨",
+        "pinyin": "Běijīng zuótiān méi xià yǔ",
+        "spanish": "Ayer no llovió en Pekín."
+      },
+      {
+        "hanzi": "她妈妈在医院工作",
+        "pinyin": "tā māma zài yīyuàn gōngzuò",
+        "spanish": "Su mamá trabaja en el hospital."
+      },
+      {
+        "hanzi": "这个椅子五十块钱",
+        "pinyin": "zhège yǐzi wǔshí kuài qián",
+        "spanish": "Esta silla cuesta cincuenta yuanes."
+      },
+      {
+        "hanzi": "今天天气不错",
+        "pinyin": "jīntiān tiānqì búcuò",
+        "spanish": "Hoy hace buen clima."
+      },
+      {
+        "hanzi": "他喜欢看报纸",
+        "pinyin": "tā xǐhuān kàn bàozhǐ",
+        "spanish": "A él le gusta leer el periódico."
+      },
+      {
+        "hanzi": "你们学校真漂亮",
+        "pinyin": "nǐmen xuéxiào zhēn piàoliang",
+        "spanish": "Su escuela es muy bonita."
+      },
+      {
+        "hanzi": "让我想一想",
+        "pinyin": "ràng wǒ xiǎng yi xiǎng",
+        "spanish": "Déjame pensarlo."
+      },
+      {
+        "hanzi": "生日快乐",
+        "pinyin": "shēngrì kuàilè",
+        "spanish": "Feliz cumpleaños."
+      },
+      {
+        "hanzi": "我买了一些吃的",
+        "pinyin": "wǒ mǎi le yìxiē chī de",
+        "spanish": "Compré algo de comer."
+      },
+      {
+        "hanzi": "他家离火车站很近",
+        "pinyin": "tā jiā lí huǒchēzhàn hěn jìn",
+        "spanish": "Su casa está cerca de la estación de tren."
+      },
+      {
+        "hanzi": "明天我们去游泳吧",
+        "pinyin": "míngtiān wǒmen qù yóuyǒng ba",
+        "spanish": "Mañana vayamos a nadar."
+      },
+      {
+        "hanzi": "电影晚上八点开始",
+        "pinyin": "diànyǐng wǎnshang bā diǎn kāishǐ",
+        "spanish": "La película empieza a las ocho de la noche."
+      }
+    ]
+  },
+  {
+    "title": "Segundo examen",
+    "sentences": [
+      {
+        "hanzi": "太好了",
+        "pinyin": "tài hǎo le",
+        "spanish": "¡Qué bien!"
+      },
+      {
+        "hanzi": "他没去医院",
+        "pinyin": "tā méi qù yīyuàn",
+        "spanish": "Él no fue al hospital."
+      },
+      {
+        "hanzi": "电影院在前面",
+        "pinyin": "diànyǐngyuàn zài qiánmiàn",
+        "spanish": "El cine está enfrente."
+      },
+      {
+        "hanzi": "他喜欢读书",
+        "pinyin": "tā xǐhuān dúshū",
+        "spanish": "A él le gusta leer."
+      },
+      {
+        "hanzi": "我们都看见那个人了",
+        "pinyin": "wǒmen dōu kànjiàn nàge rén le",
+        "spanish": "Todos vimos a esa persona."
+      },
+      {
+        "hanzi": "昨天天气很冷",
+        "pinyin": "zuótiān tiānqì hěn lěng",
+        "spanish": "Ayer hizo mucho frío."
+      },
+      {
+        "hanzi": "现在是下午三点十分",
+        "pinyin": "xiànzài shì xiàwǔ sān diǎn shí fēn",
+        "spanish": "Ahora son las 3:10 de la tarde."
+      },
+      {
+        "hanzi": "我的手机没电了",
+        "pinyin": "wǒ de shǒujī méi diàn le",
+        "spanish": "Mi celular se quedó sin batería."
+      },
+      {
+        "hanzi": "欢迎你们到我家玩儿",
+        "pinyin": "huānyíng nǐmen dào wǒ jiā wánr",
+        "spanish": "Bienvenidos a mi casa."
+      },
+      {
+        "hanzi": "服务员我要一杯咖啡",
+        "pinyin": "fúwùyuán wǒ yào yì bēi kāfēi",
+        "spanish": "Mesero, quiero una taza de café."
+      },
+      {
+        "hanzi": "希望明天别下雨",
+        "pinyin": "xīwàng míngtiān bié xià yǔ",
+        "spanish": "Espero que mañana no llueva."
+      },
+      {
+        "hanzi": "这儿的东西真便宜",
+        "pinyin": "zhèr de dōngxi zhēn piányi",
+        "spanish": "Las cosas aquí son muy baratas."
+      },
+      {
+        "hanzi": "谢谢您的介绍",
+        "pinyin": "xièxie nín de jièshào",
+        "spanish": "Gracias por su presentación."
+      },
+      {
+        "hanzi": "他觉得非常快乐",
+        "pinyin": "tā juéde fēicháng kuàilè",
+        "spanish": "Él se siente muy feliz."
+      },
+      {
+        "hanzi": "你早点儿休息吧",
+        "pinyin": "nǐ zǎodiǎnr xiūxi ba",
+        "spanish": "Descansa temprano."
+      }
+    ]
+  },
+  {
+    "title": "Tercer examen",
+    "sentences": [
+      {
+        "hanzi": "我女儿七岁了",
+        "pinyin": "wǒ nǚ'ér qī suì le",
+        "spanish": "Mi hija tiene siete años."
+      },
+      {
+        "hanzi": "他爱吃水果",
+        "pinyin": "tā ài chī shuǐguǒ",
+        "spanish": "A él le encanta comer fruta."
+      },
+      {
+        "hanzi": "这个电脑是我的",
+        "pinyin": "zhège diànnǎo shì wǒ de",
+        "spanish": "Esta computadora es mía."
+      },
+      {
+        "hanzi": "下午我去买火车票",
+        "pinyin": "xiàwǔ wǒ qù mǎi huǒchēpiào",
+        "spanish": "Por la tarde voy a comprar boleto de tren."
+      },
+      {
+        "hanzi": "我不认识他",
+        "pinyin": "wǒ bú rènshi tā",
+        "spanish": "No lo conozco."
+      },
+      {
+        "hanzi": "一年有十二个月",
+        "pinyin": "yì nián yǒu shí'èr ge yuè",
+        "spanish": "Un año tiene doce meses."
+      },
+      {
+        "hanzi": "他住在学校里",
+        "pinyin": "tā zhù zài xuéxiào lǐ",
+        "spanish": "Él vive en la escuela."
+      },
+      {
+        "hanzi": "他们星期一考试",
+        "pinyin": "tāmen xīngqīyī kǎoshì",
+        "spanish": "Ellos tienen examen el lunes."
+      },
+      {
+        "hanzi": "我们坐出租车去吧",
+        "pinyin": "wǒmen zuò chūzūchē qù ba",
+        "spanish": "Vayamos en taxi."
+      },
+      {
+        "hanzi": "明天是他的生日",
+        "pinyin": "míngtiān shì tā de shēngrì",
+        "spanish": "Mañana es su cumpleaños."
+      },
+      {
+        "hanzi": "他没去医院",
+        "pinyin": "tā méi qù yīyuàn",
+        "spanish": "Él no fue al hospital."
+      },
+      {
+        "hanzi": "现在九点半了",
+        "pinyin": "xiànzài jiǔ diǎn bàn le",
+        "spanish": "Ahora son las nueve y media."
+      },
+      {
+        "hanzi": "欢迎下次再来",
+        "pinyin": "huānyíng xià cì zài lái",
+        "spanish": "Bienvenido la próxima vez."
+      },
+      {
+        "hanzi": "你唱得非常好",
+        "pinyin": "nǐ chàng de fēicháng hǎo",
+        "spanish": "Cantas muy bien."
+      },
+      {
+        "hanzi": "他的房间号是七零四",
+        "pinyin": "tā de fángjiān hào shì qī líng sì",
+        "spanish": "Su número de habitación es 704."
+      }
+    ]
+  },
+  {
+    "title": "Cuarto examen",
+    "sentences": [
+      {
+        "hanzi": "我坐火车去",
+        "pinyin": "wǒ zuò huǒchē qù",
+        "spanish": "Voy en tren."
+      },
+      {
+        "hanzi": "谢谢你请我看电影",
+        "pinyin": "xièxie nǐ qǐng wǒ kàn diànyǐng",
+        "spanish": "Gracias por invitarme al cine."
+      },
+      {
+        "hanzi": "你的衣服很漂亮",
+        "pinyin": "nǐ de yīfu hěn piàoliang",
+        "spanish": "Tu ropa es muy bonita."
+      },
+      {
+        "hanzi": "这是张小姐的电脑",
+        "pinyin": "zhè shì Zhāng xiǎojiě de diànnǎo",
+        "spanish": "Esta es la computadora de la señorita Zhang."
+      },
+      {
+        "hanzi": "他在医院工作",
+        "pinyin": "tā zài yīyuàn gōngzuò",
+        "spanish": "Él trabaja en el hospital."
+      },
+      {
+        "hanzi": "我是上个月来中国的",
+        "pinyin": "wǒ shì shàng ge yuè lái Zhōngguó de",
+        "spanish": "Vine a China el mes pasado."
+      },
+      {
+        "hanzi": "对不起，他不在家",
+        "pinyin": "duìbuqǐ tā bú zài jiā",
+        "spanish": "Lo siento, no está en casa."
+      },
+      {
+        "hanzi": "雪下得真大",
+        "pinyin": "xuě xià de zhēn dà",
+        "spanish": "Está nevando muchísimo."
+      },
+      {
+        "hanzi": "他比我大五岁",
+        "pinyin": "tā bǐ wǒ dà wǔ suì",
+        "spanish": "Él es cinco años mayor que yo."
+      },
+      {
+        "hanzi": "服务员在打电话",
+        "pinyin": "fúwùyuán zài dǎ diànhuà",
+        "spanish": "El mesero está hablando por teléfono."
+      },
+      {
+        "hanzi": "多运动对身体好",
+        "pinyin": "duō yùndòng duì shēntǐ hǎo",
+        "spanish": "Hacer más ejercicio es bueno para la salud."
+      },
+      {
+        "hanzi": "我知道那个公司",
+        "pinyin": "wǒ zhīdào nàge gōngsī",
+        "spanish": "Conozco esa empresa."
+      },
+      {
+        "hanzi": "欢迎您来我们学校",
+        "pinyin": "huānyíng nín lái wǒmen xuéxiào",
+        "spanish": "Bienvenido a nuestra escuela."
+      },
+      {
+        "hanzi": "那本书我看完了",
+        "pinyin": "nà běn shū wǒ kàn wán le",
+        "spanish": "Terminé de leer ese libro."
+      },
+      {
+        "hanzi": "你好，我要一杯咖啡",
+        "pinyin": "nǐ hǎo wǒ yào yì bēi kāfēi",
+        "spanish": "Hola, quiero una taza de café."
+      }
+    ]
+  },
+  {
+    "title": "Quinto examen",
+    "sentences": [
+      {
+        "hanzi": "我先生是老师",
+        "pinyin": "wǒ xiānsheng shì lǎoshī",
+        "spanish": "Mi esposo es maestro."
+      },
+      {
+        "hanzi": "这个杯子太小了",
+        "pinyin": "zhège bēizi tài xiǎo le",
+        "spanish": "Esta taza es demasiado pequeña."
+      },
+      {
+        "hanzi": "现在是十点零八",
+        "pinyin": "xiànzài shì shí diǎn líng bā",
+        "spanish": "Ahora son las 10:08."
+      },
+      {
+        "hanzi": "王小姐你的电话",
+        "pinyin": "Wáng xiǎojiě nǐ de diànhuà",
+        "spanish": "Señorita Wang, su llamada."
+      },
+      {
+        "hanzi": "他坐在后面",
+        "pinyin": "tā zuò zài hòumian",
+        "spanish": "Él está sentado atrás."
+      },
+      {
+        "hanzi": "我们星期天去看电影",
+        "pinyin": "wǒmen xīngqītiān qù kàn diànyǐng",
+        "spanish": "El domingo iremos al cine."
+      },
+      {
+        "hanzi": "对不起，我明天不能来",
+        "pinyin": "duìbuqǐ wǒ míngtiān bù néng lái",
+        "spanish": "Lo siento, mañana no puedo venir."
+      },
+      {
+        "hanzi": "他开出租车十几年了",
+        "pinyin": "tā kāi chūzūchē shí jǐ nián le",
+        "spanish": "Hace más de diez años que maneja taxi."
+      },
+      {
+        "hanzi": "我一小时后回来",
+        "pinyin": "wǒ yì xiǎoshí hòu huílái",
+        "spanish": "Regresaré en una hora."
+      },
+      {
+        "hanzi": "机场离这儿很远",
+        "pinyin": "jīchǎng lí zhèr hěn yuǎn",
+        "spanish": "El aeropuerto está lejos de aquí."
+      },
+      {
+        "hanzi": "他生病了，在家休息",
+        "pinyin": "tā shēngbìng le zài jiā xiūxi",
+        "spanish": "Está enfermo y descansa en casa."
+      },
+      {
+        "hanzi": "多吃水果对身体好",
+        "pinyin": "duō chī shuǐguǒ duì shēntǐ hǎo",
+        "spanish": "Comer más fruta es bueno para la salud."
+      },
+      {
+        "hanzi": "别说话了",
+        "pinyin": "bié shuōhuà le",
+        "spanish": "Deja de hablar."
+      },
+      {
+        "hanzi": "晚上可能有雨",
+        "pinyin": "wǎnshang kěnéng yǒu yǔ",
+        "spanish": "Puede que llueva por la noche."
+      },
+      {
+        "hanzi": "他回答得非常好",
+        "pinyin": "tā huídá de fēicháng hǎo",
+        "spanish": "Él respondió muy bien."
+      }
+    ]
+  },
+  {
+    "title": "Sexto examen",
+    "sentences": [
+      {
+        "hanzi": "苹果在桌子上",
+        "pinyin": "píngguǒ zài zhuōzi shàng",
+        "spanish": "La manzana está sobre la mesa."
+      },
+      {
+        "hanzi": "他不会开车",
+        "pinyin": "tā bú huì kāichē",
+        "spanish": "Él no sabe manejar."
+      },
+      {
+        "hanzi": "我今年二十四岁了",
+        "pinyin": "wǒ jīnnián èrshí sì suì le",
+        "spanish": "Este año tengo 24 años."
+      },
+      {
+        "hanzi": "我先生爱游泳",
+        "pinyin": "wǒ xiānsheng ài yóuyǒng",
+        "spanish": "A mi esposo le encanta nadar."
+      },
+      {
+        "hanzi": "中午我们吃米饭",
+        "pinyin": "zhōngwǔ wǒmen chī mǐfàn",
+        "spanish": "Al mediodía comemos arroz."
+      },
+      {
+        "hanzi": "他在看电视",
+        "pinyin": "tā zài kàn diànshì",
+        "spanish": "Él está viendo televisión."
+      },
+      {
+        "hanzi": "他想去北京工作",
+        "pinyin": "tā xiǎng qù Běijīng gōngzuò",
+        "spanish": "Él quiere ir a trabajar a Pekín."
+      },
+      {
+        "hanzi": "一个小时有六十分钟",
+        "pinyin": "yí ge xiǎoshí yǒu liùshí fēnzhōng",
+        "spanish": "Una hora tiene sesenta minutos."
+      },
+      {
+        "hanzi": "那个手机是我的",
+        "pinyin": "nàge shǒujī shì wǒ de",
+        "spanish": "Ese celular es mío."
+      },
+      {
+        "hanzi": "您女儿真漂亮",
+        "pinyin": "nín nǚ'ér zhēn piàoliang",
+        "spanish": "Su hija es muy bonita."
+      },
+      {
+        "hanzi": "火车站离这儿很近",
+        "pinyin": "huǒchēzhàn lí zhèr hěn jìn",
+        "spanish": "La estación de tren está cerca de aquí."
+      },
+      {
+        "hanzi": "对不起，我来晚了",
+        "pinyin": "duìbuqǐ wǒ lái wǎn le",
+        "spanish": "Perdón, llegué tarde."
+      },
+      {
+        "hanzi": "希望明天是晴天",
+        "pinyin": "xīwàng míngtiān shì qíngtiān",
+        "spanish": "Espero que mañana esté soleado."
+      },
+      {
+        "hanzi": "西瓜两块五一斤",
+        "pinyin": "xīguā liǎng kuài wǔ yì jīn",
+        "spanish": "La sandía cuesta 2.5 yuanes por jin."
+      },
+      {
+        "hanzi": "我儿子在这个学校上学",
+        "pinyin": "wǒ érzi zài zhège xuéxiào shàngxué",
+        "spanish": "Mi hijo estudia en esta escuela."
+      }
+    ]
+  },
+  {
+    "title": "Séptimo examen",
+    "sentences": [
+      {
+        "hanzi": "儿子喜欢坐飞机",
+        "pinyin": "érzi xǐhuān zuò fēijī",
+        "spanish": "A mi hijo le gusta viajar en avión."
+      },
+      {
+        "hanzi": "他现在在学校",
+        "pinyin": "tā xiànzài zài xuéxiào",
+        "spanish": "Él ahora está en la escuela."
+      },
+      {
+        "hanzi": "那个人我认识",
+        "pinyin": "nàge rén wǒ rènshi",
+        "spanish": "A esa persona la conozco."
+      },
+      {
+        "hanzi": "你说什么？我没听见",
+        "pinyin": "nǐ shuō shénme wǒ méi tīngjiàn",
+        "spanish": "¿Qué dijiste? No escuché."
+      },
+      {
+        "hanzi": "她是我的同学",
+        "pinyin": "tā shì wǒ de tóngxué",
+        "spanish": "Ella es mi compañera de clase."
+      },
+      {
+        "hanzi": "这个月有三十一天",
+        "pinyin": "zhège yuè yǒu sānshí yī tiān",
+        "spanish": "Este mes tiene treinta y un días."
+      },
+      {
+        "hanzi": "我朋友在饭店工作",
+        "pinyin": "wǒ péngyou zài fàndiàn gōngzuò",
+        "spanish": "Mi amigo trabaja en un restaurante."
+      },
+      {
+        "hanzi": "外面下雪了",
+        "pinyin": "wàimian xià xuě le",
+        "spanish": "Está nevando afuera."
+      },
+      {
+        "hanzi": "我想买块儿新手表",
+        "pinyin": "wǒ xiǎng mǎi kuàir xīn shǒubiǎo",
+        "spanish": "Quiero comprar un reloj nuevo."
+      },
+      {
+        "hanzi": "对不起，我打错了",
+        "pinyin": "duìbuqǐ wǒ dǎ cuò le",
+        "spanish": "Perdón, marqué mal."
+      },
+      {
+        "hanzi": "她做的菜很好吃",
+        "pinyin": "tā zuò de cài hěn hǎochī",
+        "spanish": "La comida que ella hace es muy rica."
+      },
+      {
+        "hanzi": "医院让他多休息",
+        "pinyin": "yīyuàn ràng tā duō xiūxi",
+        "spanish": "El hospital le pidió descansar más."
+      },
+      {
+        "hanzi": "我还没去过中国呢",
+        "pinyin": "wǒ hái méi qù guo Zhōngguó ne",
+        "spanish": "Todavía no he ido a China."
+      },
+      {
+        "hanzi": "红色的比白色的好看",
+        "pinyin": "hóngsè de bǐ báisè de hǎokàn",
+        "spanish": "El rojo es más bonito que el blanco."
+      },
+      {
+        "hanzi": "谢谢你送我回来，再见",
+        "pinyin": "xièxie nǐ sòng wǒ huílái zàijiàn",
+        "spanish": "Gracias por traerme de regreso. Adiós."
+      }
+    ]
+  }
+];
+
+let currentExamIndex = 0;
+let activeRecognition = null;
+let activeTimeout = null;
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.getElementById(id).scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function loadExamCards(){
+  const grid = document.getElementById("examGrid");
+  grid.innerHTML = exams.map((exam, index) => `
+    <div class="card exam-card">
+      <div>
+        <div class="exam-title">${exam.title}</div>
+        <div class="exam-count">${exam.sentences.length} oraciones</div>
+        <p style="color:var(--muted)">Escuchar, repetir, comparar pronunciación y consultar pinyin/español ocultos.</p>
+        <span class="chip">听</span>
+        <span class="chip">跟读</span>
+        <span class="chip">拼音 oculto</span>
+      </div>
+      <button class="btn-primary" onclick="openExam(${index})">Entrar</button>
+    </div>
+  `).join("");
+}
+
+function openExam(index){
+  currentExamIndex = index;
+  document.getElementById("practiceTitle").innerText = exams[index].title;
+  renderSentences();
+  showScreen("practice");
+}
+
+function renderSentences(){
+  const list = document.getElementById("sentenceList");
+  const exam = exams[currentExamIndex];
+
+  list.innerHTML = exam.sentences.map((s, i) => `
+    <div class="sentence-card">
+      <div class="num">${i+1}</div>
+
+      <div>
+        <div class="hanzi">${s.hanzi}</div>
+
+        <div class="hidden-help">
+          <div>
+            <span class="label">Pinyin:</span>
+            <span tabindex="0" class="blur-text">${s.pinyin}</span>
+          </div>
+          <div>
+            <span class="label">Español:</span>
+            <span tabindex="0" class="blur-text">${s.spanish}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn-blue" onclick="speakSentence(${i})">🔊 Escuchar</button>
+        <button class="btn-green" onclick="repeatSentence(${i})">🎙️ Repetir</button>
+      </div>
+
+      <div class="result" id="result-${i}">Resultado...</div>
+    </div>
+  `).join("");
+}
+
+function speakSentence(index){
+  const text = exams[currentExamIndex].sentences[index].hanzi;
+  speakChinese(text);
+}
+
+function speakChinese(text){
+  if(!window.speechSynthesis){
+    alert("Tu navegador no soporta audio.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.78;
+  utterance.pitch = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const voice = voices.find(v => v.lang.includes("zh") || v.name.includes("Chinese"));
+  if(voice) utterance.voice = voice;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function cleanChinese(text){
+  return (text || "")
+    .replace(/[，。！？、；：\s,.!?]/g,"")
+    .replace(/儿/g,"")
+    .trim();
+}
+
+function scoreChinese(expected, heard){
+  expected = cleanChinese(expected);
+  heard = cleanChinese(heard);
+
+  const chars = [...new Set(expected.split(""))];
+  const found = chars.filter(ch => heard.includes(ch));
+  return chars.length ? Math.round((found.length / chars.length) * 100) : 0;
+}
+
+function repeatSentence(index){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const result = document.getElementById("result-" + index);
+  const target = exams[currentExamIndex].sentences[index].hanzi;
+
+  if(!SpeechRecognition){
+    result.innerHTML = "Tu navegador no permite reconocimiento de voz. Usa Google Chrome.";
+    return;
+  }
+
+  stopRecognition();
+
+  const recognition = new SpeechRecognition();
+  activeRecognition = recognition;
+
+  recognition.lang = "zh-CN";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  let finalText = "";
+  let interimText = "";
+
+  result.innerHTML = "Escuchando... repite la oración.";
+
+  recognition.onresult = function(event){
+    interimText = "";
+
+    for(let i = event.resultIndex; i < event.results.length; i++){
+      const text = event.results[i][0].transcript;
+      if(event.results[i].isFinal) finalText += text + " ";
+      else interimText += text;
+    }
+
+    result.innerHTML = "<strong>Escuchando:</strong><br>" + (finalText + interimText);
+
+    clearTimeout(activeTimeout);
+    activeTimeout = setTimeout(() => stopRecognition(), 4200);
+  };
+
+  recognition.onerror = function(event){
+    result.innerHTML = "No se pudo reconocer el audio: " + event.error;
+  };
+
+  recognition.onend = function(){
+    const heard = (finalText + interimText).trim();
+    const score = scoreChinese(target, heard);
+
+    let cls = "status-bad";
+    let msg = "Escucha otra vez y repite más lento.";
+
+    if(score >= 70){
+      cls = "status-good";
+      msg = "Muy bien. Se entendió la oración.";
+    } else if(score >= 45){
+      cls = "status-mid";
+      msg = "Bien. La idea se entiende, pero faltaron sonidos o palabras.";
+    }
+
+    result.innerHTML = `
+      <strong>La computadora escuchó:</strong><br>${heard || "No detectó texto claro."}<br><br>
+      <span class="${cls}">Resultado: ${score}/100</span><br>
+      ${msg}
+    `;
+  };
+
+  recognition.start();
+
+  clearTimeout(activeTimeout);
+  activeTimeout = setTimeout(() => stopRecognition(), 12000);
+}
+
+function stopRecognition(){
+  clearTimeout(activeTimeout);
+  if(activeRecognition){
+    try{ activeRecognition.stop(); }catch(e){}
+  }
+  activeRecognition = null;
+}
+
+window.onload = loadExamCards;
+</script>
+</body>
+</html>
