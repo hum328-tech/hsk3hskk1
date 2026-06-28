@@ -354,9 +354,11 @@ function newListeningQuestion(){
   const choices = shuffle([target,...distractors]);
   document.getElementById("listeningQuestion").innerHTML = `🔊 Escucha la palabra y toca la tarjeta correcta.`;
   speak(target.zh);
-  document.getElementById("listeningChoices").innerHTML = choices.map(w=>`
-    <button class="choice" onclick="checkListeningChoice(this,'${w.zh}')">${w.zh}<br><span class="small">${w.py}</span></button>
-  `).join("");
+document.getElementById("listeningChoices").innerHTML = choices.map(w=>`
+  <button class="choice" onclick="checkListeningChoice(this,'${w.zh}')">
+    ${w.es}
+  </button>
+`).join("");
 }
 
 function checkListeningChoice(btn, zh){
