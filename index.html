@@ -255,6 +255,10 @@ const freeQuestions = [
 
 let totalPoints = 0, attempts = [], currentRecognition = null, currentListenTarget = null;
 
+let listeningRound = [];
+let listeningIndex = 0;
+let listeningFinished = false;
+
 function showSection(id, btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -348,26 +352,95 @@ function renderVocabulary(){
 }
 
 function newListeningQuestion(){
-  const target = vocabulary[Math.floor(Math.random()*vocabulary.length)];
+  listeningRound = shuffle(vocabulary).slice(0, 15);
+  listeningIndex = 0;
+  listeningFinished = false;
+  showListeningQuestion();
+}
+function showListeningQuestion(){
+  if(listeningIndex >= listeningRound.length){
+    listeningFinished = true;
+    currentListenTarget = null;
+
+    document.getElementById("listeningQuestion").innerHTML = `
+      🏆 ¡Excelente! Terminaste las 15 palabras.
+      <br><br>
+      <b>Resultado:</b> ${listeningRound.length}/${listeningRound.length}
+    `;
+
+    document.getElementById("listeningChoices").innerHTML = `
+      <button class="choice correct" onclick="newListeningQuestion()">
+        🔄 Volver a hacerlo
+      </button>
+    `;
+
+    playVictorySound();
+    return;
+  }
+
+  const target = listeningRound[listeningIndex];
   currentListenTarget = target.zh;
+
   const distractors = shuffle(vocabulary.filter(w=>w.zh!==target.zh)).slice(0,3);
-  const choices = shuffle([target,...distractors]);
-  document.getElementById("listeningQuestion").innerHTML = `🔊 Escucha la palabra y toca la tarjeta correcta.`;
+  const choices = shuffle([target, ...distractors]);
+
+  document.getElementById("listeningQuestion").innerHTML = `
+    🔊 Palabra ${listeningIndex + 1}/${listeningRound.length}
+    <br>
+    Escucha la palabra y toca la tarjeta correcta.
+  `;
+
   speak(target.zh);
-document.getElementById("listeningChoices").innerHTML = choices.map(w=>`
-  <button class="choice" onclick="checkListeningChoice(this,'${w.zh}')">
-    ${w.es}
-  </button>
-`).join("");
-}
 
+  document.getElementById("listeningChoices").innerHTML = choices.map(w=>`
+    <button class="choice" onclick="checkListeningChoice(this,'${w.zh}')">
+      ${w.es}
+    </button>
+  `).join("");
+}
 function checkListeningChoice(btn, zh){
-  if(!currentListenTarget) return;
+  if(!currentListenTarget || listeningFinished) return;
+
   if(zh === currentListenTarget){
-    btn.classList.add("correct"); totalPoints += 5; document.getElementById("totalPoints").textContent = totalPoints;
-  } else { btn.classList.add("wrong"); }
+    btn.classList.add("correct");
+    totalPoints += 5;
+    document.getElementById("totalPoints").textContent = totalPoints;
+
+    setTimeout(()=>{
+      listeningIndex++;
+      showListeningQuestion();
+    }, 700);
+
+  } else {
+    btn.classList.add("wrong");
+    btn.disabled = true;
+  }
 }
 
+  function playVictorySound(){
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+  const notes = [523.25, 659.25, 783.99, 1046.50];
+
+  notes.forEach((freq, i)=>{
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.frequency.value = freq;
+    osc.type = "sine";
+
+    gain.gain.setValueAtTime(0.001, ctx.currentTime + i * 0.15);
+    gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + i * 0.15 + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.22);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(ctx.currentTime + i * 0.15);
+    osc.stop(ctx.currentTime + i * 0.15 + 0.25);
+  });
+}
+  
 function renderShadowing(){
   const container = document.getElementById("shadowingContainer");
   const all = dialogs.flatMap(d=>d.fragments).slice(0,8);
