@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HSK 3 · Lección 1</title>
+<style>
+:root{--blue:#2563eb;--dark:#1e3a8a;--bg:#f4f7fb;--card:#fff;--soft:#eff6ff;--gold:#fef3c7;--green:#ecfdf5;--red:#dc2626;--purple:#7c3aed;--line:#e5e7eb}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#1f2937}.app{max-width:1180px;margin:auto;padding:20px}h1{text-align:center;color:var(--dark);margin:8px 0}.topbar,.nav{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}button{border:none;border-radius:14px;padding:11px 15px;background:var(--blue);color:white;font-weight:700;cursor:pointer;font-size:15px}button:hover{filter:brightness(.92)}button.secondary{background:#475569}button.danger{background:var(--red)}button.success{background:#059669}.answer-select{width:64px;height:42px;border:2px solid #cbd5e1;border-radius:12px;font-size:22px;font-weight:800;text-align:center;background:white;color:#111827}.answer-select.correct{border-color:#16a34a;background:#dcfce7}.answer-select.wrong{border-color:#dc2626;background:#fee2e2}.check-result{margin-top:14px;padding:12px;border-radius:14px;background:#f8fafc;border:1px solid #e5e7eb;font-weight:800;color:#1e3a8a;display:none}.counter{font-weight:700;color:var(--dark);background:white;padding:10px 14px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.08)}.screen{display:none}.screen.active{display:block}.layout{display:grid;grid-template-columns:2fr 1fr;gap:18px}.card{background:var(--card);border-radius:20px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.08)}.lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:20px}.lesson-card{background:white;border-radius:22px;padding:24px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.09);border:2px solid #dbeafe}.lesson-card h2{font-size:34px;color:var(--dark);margin:8px 0}.lesson-card p{font-size:18px;color:#475569}.exercise-title{font-size:28px;color:var(--dark);margin:0 0 12px}.instructions{background:#eef2ff;border-left:6px solid var(--blue);padding:12px 14px;border-radius:14px;margin-bottom:16px;font-weight:700}.matching-options{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:18px}.option-line{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;font-size:24px;line-height:1.6;padding:8px 10px;border-radius:12px;background:#fafafa;border:1px solid var(--line)}.option-letter{font-weight:800;text-align:center;color:#111827}.question-list{display:grid;gap:8px}.question-line{display:grid;grid-template-columns:58px 1fr 90px;gap:10px;align-items:start;font-size:24px;line-height:1.6;padding:8px 10px;border-bottom:1px solid var(--line)}.blank{font-family:monospace;text-align:center;font-weight:800;color:#111827}.word-bank{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;font-size:24px;margin:4px 0 18px}.bank-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 10px}.fill-line{font-size:24px;line-height:1.8;padding:8px 10px;border-bottom:1px solid var(--line)}.word{cursor:pointer;padding:3px 5px;border-radius:9px;display:inline-block;transition:.15s}.word:hover{background:#dbeafe}.word.saved{background:var(--gold)}.punct{display:inline-block;margin-right:3px}#infoBox{margin-top:18px;background:var(--soft);border-left:6px solid var(--blue);border-radius:14px;padding:16px;display:none}#infoWord{margin:0 0 8px;font-size:30px;color:#1d4ed8}.pinyin{color:var(--purple);font-weight:700;margin:4px 0}.translation{font-size:18px;margin:6px 0}.grammar{background:white;border-radius:12px;padding:10px;margin-top:10px;font-size:16px}.answer-box{margin-top:16px;padding:12px;border-radius:14px;background:var(--green);color:#065f46;font-weight:700;display:none;font-size:20px}.glossary-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.glossary-item{background:#f9fafb;border-radius:14px;padding:12px;margin:10px 0;border:1px solid #e5e7eb}.glossary-item strong{font-size:22px;color:#111827}.empty{color:#6b7280;font-style:italic}.word.marked{background:#fef08a;box-shadow:0 0 0 3px #facc15 inset}.glossary-item.marked{background:#fff7cc;border-color:#facc15}.sound-btn{padding:7px 9px;border-radius:10px;font-size:14px;margin-left:8px;background:#0ea5e9}.quiz-panel{margin-top:18px}.quiz-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.quiz-question{min-height:110px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f8fafc;border:2px solid #dbeafe;border-radius:18px;padding:18px;font-size:32px;font-weight:900;color:var(--dark)}.quiz-sub{font-size:18px;color:#6b7280;margin-top:6px}.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.quiz-option{background:white;color:#111827;border:2px solid #cbd5e1;min-height:64px}.quiz-option.correct{background:#dcfce7;border-color:#16a34a}.quiz-option.wrong{background:#fee2e2;border-color:#dc2626}.quiz-status{margin-top:12px;text-align:center;font-weight:800;color:var(--dark)}.flashcard-box{min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;background:#f8fafc;border:2px solid #dbeafe;border-radius:22px;padding:28px;font-size:42px;font-weight:900;color:var(--dark);margin-top:14px}.flashcard-back{font-size:30px;color:#111827}.flashcard-note{font-size:18px;color:#6b7280;margin-top:10px}.flashcard-status{margin-top:12px;text-align:center;font-weight:800;color:var(--dark)}@media(max-width:850px){.quiz-options{grid-template-columns:1fr}}@media(max-width:850px){.layout{grid-template-columns:1fr}.app{padding:12px}.option-line,.question-line,.fill-line,.word-bank{font-size:21px}.question-line{grid-template-columns:48px 1fr 70px}}
+</style>
+</head>
+<body>
+<div class="app">
+<h1 id="mainTitle">HSK 3 · Lección 1</h1>
+
+<section id="lessonScreen" class="screen active">
+  <div class="lesson-grid">
+    <div class="lesson-card">
+      <div style="font-size:56px">📘</div>
+      <h2>Lección 1</h2>
+      <p>Ejercicios 21-30</p>
+      <button onclick="openExercise(0)">Entrar</button>
+    </div>
+  </div>
+</section>
+
+<section id="exerciseScreen" class="screen">
+  <div class="nav">
+    <button onclick="backToLessons()">🏠 Lecciones</button>
+    <button onclick="prevExercise()">⬅ Anterior</button>
+    <span id="counter" class="counter"></span>
+    <button onclick="nextExercise()">Siguiente ➡</button>
+    <button onclick="toggleGlossary()">📚 Glosario</button>
+    <button onclick="checkAnswers()">📝 Revisar</button>
+    <button onclick="toggleAnswer()">✅ Ver respuestas</button>
+    <button class="success" onclick="openGlossaryQuiz()">🎮 Opción múltiple</button>
+    <button class="success" onclick="openFlashcards()">🃏 Flashcards</button>
+  </div>
+  <div class="layout">
+    <div class="card">
+      <h2 id="exerciseTitle" class="exercise-title"></h2>
+      <div id="instructions" class="instructions"></div>
+      <div id="exerciseContent"></div>
+      <div id="checkResult" class="check-result"></div>
+      <div id="answerBox" class="answer-box"></div>
+      <div id="infoBox">
+        <h2 id="infoWord"></h2>
+        <div class="pinyin" id="infoPinyin"></div>
+        <div class="translation" id="infoTranslation"></div>
+        <div class="grammar" id="infoGrammar"></div>
+      </div>
+    </div>
+    <div class="card" id="glossaryCard">
+      <div class="glossary-head"><h2>📚 Glosario global</h2><button class="danger" onclick="clearGlossary()">Limpiar</button></div>
+      <p>Las palabras tocadas se guardan aquí.</p>
+      <div id="glossaryList"></div>
+    </div>
+  </div>
+</section>
+
+<section id="quizScreen" class="screen">
+  <div class="card quiz-panel">
+    <h2 class="exercise-title">🎮 Opción múltiple del glosario</h2>
+    <div class="quiz-controls">
+      <button class="secondary" onclick="closeGlossaryQuiz()">⬅ Volver / cerrar juego</button>
+      <button onclick="setQuizDirection('zh-es')">中文 → Español</button>
+      <button onclick="setQuizDirection('es-zh')">Español → 中文</button>
+      <button onclick="toggleQuizPinyin()">👁️ Pinyin ON/OFF</button>
+      <button onclick="resetGlossaryQuiz()">🔄 Reiniciar juego</button>
+    </div>
+    <div id="quizStatus" class="quiz-status">Necesitas mínimo 4 palabras en el glosario.</div>
+    <div id="quizQuestion" class="quiz-question"></div>
+    <div id="quizOptions" class="quiz-options"></div>
+  </div>
+</section>
+
+<section id="flashcardScreen" class="screen">
+  <div class="card quiz-panel">
+    <h2 class="exercise-title">🃏 Flashcards del glosario</h2>
+    <div class="quiz-controls">
+      <button class="secondary" onclick="closeFlashcards()">⬅ Volver / cerrar tarjetas</button>
+      <button onclick="flipFlashcard()">🔄 Voltear</button>
+      <button onclick="speakCurrentFlashcard()">🔊 Escuchar chino</button>
+      <button onclick="nextFlashcard()">Siguiente ➡</button>
+      <button onclick="resetFlashcards()">🔁 Reiniciar</button>
+    </div>
+    <div id="flashcardStatus" class="flashcard-status">Agrega palabras al glosario para practicar.</div>
+    <div id="flashcardBox" class="flashcard-box"></div>
+  </div>
+</section>
+</div>
+<script>
+const exercises = [
+  {
+    type:"matching",
+    title:"Lección 1 · Ejercicio 1",
+    instructions:"Relaciona la respuesta correcta. Toca las palabras para ver pinyin y significado.",
+    answers:"21 F · 22 C · 23 D · 24 A · 25 B",
+    options:[
+      {letter:"A", words:[w("不是","bú shì","no / no es"), p("，"), w("我","wǒ","yo"), p("—"), w("一直","yìzhí","siempre / todo el tiempo"), w("在","zài","en"), w("这家","zhè jiā","esta"), w("医院","yīyuàn","hospital"), w("工作","gōngzuò","trabajar"), p("。")]},
+      {letter:"B", words:[w("对不起","duìbuqǐ","perdón / disculpe"), p("，"), w("周老师","Zhōu lǎoshī","maestro/a Zhou"), w("现在","xiànzài","ahora"), w("不在","bú zài","no está"), p("。")]},
+      {letter:"C", words:[w("今天","jīntiān","hoy"), w("学校","xuéxiào","escuela"), w("里","lǐ","dentro"), w("一个人","yí ge rén","una persona"), w("都","dōu","todos / incluso"), w("没有","méiyǒu","no hay"), p("，"), w("大家","dàjiā","todos"), w("都","dōu","todos"), w("去","qù","ir"), w("哪儿","nǎr","dónde"), w("了","le","partícula de cambio"), p("？")]},
+      {letter:"D", words:[w("周末","zhōumò","fin de semana"), w("有时间","yǒu shíjiān","tener tiempo"), w("吗","ma","partícula de pregunta"), p("？"), w("我","wǒ","yo"), w("打算","dǎsuàn","planear"), w("请","qǐng","invitar"), w("你","nǐ","tú"), w("吃个饭","chī ge fàn","comer algo / invitar a comer"), p("。")]},
+      {letter:"E", words:[w("当然","dāngrán","por supuesto"), p("。"), w("我们","wǒmen","nosotros"), w("先","xiān","primero"), w("坐","zuò","tomar / sentarse"), w("公共汽车","gōnggòng qìchē","autobús"), p("，"), w("然后","ránhòu","luego"), w("换","huàn","cambiar / transbordar"), w("地铁","dìtiě","metro"), p("。")]},
+      {letter:"F", words:[w("可能","kěnéng","posiblemente"), w("是","shì","ser / es"), w("工作","gōngzuò","trabajo"), w("太","tài","demasiado"), w("累","lèi","cansado"), p("，"), w("生病","shēngbìng","enfermarse"), w("了","le","partícula de cambio"), p("。")]}
+    ],
+    example:{text:[w("你","nǐ","tú"), w("知道","zhīdào","saber"), w("怎么","zěnme","cómo"), w("去","qù","ir"), w("那儿","nàr","allí"), w("吗","ma","partícula de pregunta"), p("？")], answer:"E"},
+    questions:[
+      {num:21, answer:"F", words:[w("你","nǐ","tú"), w("怎么了","zěnme le","¿qué te pasa?"), p("？"), w("今天","jīntiān","hoy"), w("一点儿","yìdiǎnr","un poco / nada en negativo"), w("东西","dōngxi","cosas / comida"), w("都","dōu","incluso"), w("没吃","méi chī","no comiste"), p("。")]},
+      {num:22, answer:"C", words:[w("今天","jīntiān","hoy"), w("是","shì","ser / es"), w("周末","zhōumò","fin de semana"), p("，"), w("你","nǐ","tú"), w("去","qù","ir"), w("学校","xuéxiào","escuela"), w("做什么","zuò shénme","hacer qué"), p("？")]},
+      {num:23, answer:"D", words:[w("好啊","hǎo a","está bien"), p("，"), w("哪天","nǎ tiān","qué día"), p("？")]},
+      {num:24, answer:"A", words:[w("你","nǐ","tú"), w("是","shì","ser / es"), w("新来的","xīn lái de","recién llegado / nuevo"), w("医生","yīshēng","doctor"), w("吗","ma","partícula de pregunta"), p("？")]},
+      {num:25, answer:"B", words:[w("那","nà","entonces"), w("我","wǒ","yo"), w("明天","míngtiān","mañana"), w("再","zài","otra vez / entonces"), w("来","lái","venir"), w("吧","ba","partícula suave"), p("，"), w("谢谢","xièxie","gracias"), p("。")]}
+    ]
+  },
+  {
+    type:"fill",
+    title:"Lección 1 · Ejercicio 2",
+    instructions:"Elige la palabra correcta para completar cada oración.",
+    answers:"26 A · 27 D · 28 F · 29 B · 30 C",
+    bank:[{l:"A",t:"一直",py:"yìzhí",tr:"siempre / continuamente"},{l:"B",t:"周末",py:"zhōumò",tr:"fin de semana"},{l:"C",t:"带",py:"dài",tr:"llevar / traer"},{l:"D",t:"搬",py:"bān",tr:"mudarse / mover"},{l:"E",t:"声音",py:"shēngyīn",tr:"voz / sonido"},{l:"F",t:"面包",py:"miànbāo",tr:"pan"}],
+    example:{words:[w("她","tā","ella"), w("说话","shuōhuà","hablar"), w("的","de","partícula"), blank("E"), w("多","duō","qué tan / cuán"), w("好听","hǎotīng","sonar bonito"), w("啊","a","partícula exclamativa"), p("！")]},
+    questions:[
+      {num:26, words:[w("这几年","zhè jǐ nián","estos años"), w("我","wǒ","yo"), blank("A"), w("忙","máng","ocupado"), w("工作","gōngzuò","trabajo"), p("，"), w("没时间","méi shíjiān","no tener tiempo"), w("去","qù","ir"), w("旅游","lǚyóu","viajar"), p("。")]},
+      {num:27, words:[w("你","nǐ","tú"), blank("D"), w("家","jiā","casa"), w("的","de","partícula"), w("时候","shíhou","cuando"), p("，"), w("我","wǒ","yo"), w("来","lái","venir"), w("帮","bāng","ayudar"), w("你","nǐ","tú"), w("吧","ba","partícula suave"), p("。")]},
+      {num:28, words:[w("这个","zhège","este"), blank("F"), w("很不错","hěn búcuò","muy bueno"), p("，"), w("是","shì","ser / es"), w("你","nǐ","tú"), w("买","mǎi","comprar"), w("的","de","estructura 是...的"), w("吗","ma","partícula de pregunta"), p("？")]},
+      {num:29, words:[w("A","",""), p("："), w("这件","zhè jiàn","esta prenda"), w("新衣服","xīn yīfu","ropa nueva"), w("是","shì","ser / es"), w("什么","shénme","qué"), w("时候","shíhou","momento"), w("买","mǎi","comprar"), w("的","de","estructura 是...的"), p("？"), br(), w("B","",""), p("："), w("上","shàng","pasado / anterior"), blank("B"), p("，"), w("我妹妹","wǒ mèimei","mi hermana menor"), w("跟","gēn","con"), w("我","wǒ","yo"), w("一起","yìqǐ","juntos"), w("去","qù","ir"), w("买","mǎi","comprar"), w("的","de","estructura 是...的"), p("。")]},
+      {num:30, words:[w("A","",""), p("："), w("现在","xiànzài","ahora"), w("北方","běifāng","norte"), w("很冷","hěn lěng","hace mucho frío"), p("，"), w("多","duō","más"), blank("C"), w("几件","jǐ jiàn","varias prendas"), w("衣服","yīfu","ropa"), w("吧","ba","partícula sugerencia"), p("。"), br(), w("B","",""), p("："), w("我","wǒ","yo"), w("已经","yǐjīng","ya"), w("准备好","zhǔnbèi hǎo","preparar bien"), w("了","le","partícula"), p("。")]}
+    ]
+  }
+];
+function w(text,pinyin,translation,grammar=""){return {text,pinyin,translation,grammar}}function p(text){return {text,punctuation:true}}function blank(ans){return {blank:true,answer:ans}}function br(){return {break:true}}
+let current=0;let glossary=JSON.parse(localStorage.getItem("hsk3Glossary")||"[]");let markedWords=JSON.parse(localStorage.getItem("hsk3MarkedWords")||"[]");let quizDirection="zh-es";let quizShowPinyin=true;let quizIndex=0;let quizCorrect=0;let currentQuizItem=null;let quizPool=[];let quizAnswered=false;let flashcardPool=[];let flashcardIndex=0;let flashcardFlipped=false;
+function openExercise(i){current=i;document.getElementById("lessonScreen").classList.remove("active");document.getElementById("exerciseScreen").classList.add("active");renderExercise()}function backToLessons(){document.getElementById("exerciseScreen").classList.remove("active");document.getElementById("lessonScreen").classList.add("active")}function prevExercise(){current=(current-1+exercises.length)%exercises.length;renderExercise()}function nextExercise(){current=(current+1)%exercises.length;renderExercise()}
+function renderExercise(){const ex=exercises[current];document.getElementById("exerciseTitle").textContent=ex.title;document.getElementById("instructions").textContent=ex.instructions;document.getElementById("counter").textContent=`Ejercicio ${current+1} de ${exercises.length}`;document.getElementById("answerBox").style.display="none";document.getElementById("answerBox").textContent="Respuestas: "+ex.answers;document.getElementById("checkResult").style.display="none";document.getElementById("checkResult").textContent="";document.getElementById("infoBox").style.display="none";blankCounter=0;document.getElementById("exerciseContent").innerHTML=ex.type==="matching"?renderMatching(ex):renderFill(ex);renderGlossary()}
+function renderMatching(ex){return `<div class="matching-options">${ex.options.map(o=>`<div class="option-line"><div class="option-letter">${o.letter}</div><div>${renderWords(o.words)}</div></div>`).join("")}</div><div class="question-list"><div class="question-line"><div>例：</div><div>${renderWords(ex.example.text)}</div><div class="blank">（ ${ex.example.answer} ）</div></div>${ex.questions.map(q=>`<div class="question-line"><div>${q.num}.</div><div>${renderWords(q.words)}</div><div class="blank">（ ${answerSelect(q.num,q.answer)} ）</div></div>`).join("")}</div>`}
+function renderFill(ex){return `<div class="word-bank">${ex.bank.map(b=>`<span class="bank-item"><b>${b.l}</b> ${spanWord(b.t,b.py,b.tr)}</span>`).join("")}</div><div class="fill-line">例如：${renderWords(ex.example.words)}</div>${ex.questions.map(q=>`<div class="fill-line"><b>${q.num}.</b> ${renderWords(q.words)}</div>`).join("")}`}
+function renderWords(words){return words.map(x=>{if(x.break)return '<br>';if(x.blank)return `<span class="blank">（ ${answerSelect("blank"+blankCounter++, x.answer)} ）</span>`;if(x.punctuation)return `<span class="punct">${x.text}</span>`;return spanWord(x.text,x.pinyin,x.translation,x.grammar)}).join("")}
+let blankCounter=0;function answerSelect(id,answer=""){return `<select class="answer-select" data-answer="${answer}" data-q="${id}"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option></select>`}
+function spanWord(t,py,tr,gr=""){const saved=glossary.some(g=>g.text===t)?" saved":"";const marked=markedWords.includes(t)?" marked":"";return `<span class="word${saved}${marked}" onclick='showInfo(${JSON.stringify({text:t,pinyin:py,translation:tr,grammar:gr})})'>${t}</span>`}
+function showInfo(item){
+  if(!item.pinyin&&!item.translation)return;
+  document.getElementById("infoWord").textContent=item.text;
+  document.getElementById("infoPinyin").textContent=item.pinyin||"";
+  document.getElementById("infoTranslation").textContent=item.translation||"";
+  document.getElementById("infoGrammar").textContent=item.grammar||"";
+  document.getElementById("infoGrammar").style.display=item.grammar?"block":"none";
+  document.getElementById("infoBox").style.display="block";
+
+  const existing=glossary.find(g=>g.text===item.text);
+  glossary=glossary.filter(g=>g.text!==item.text);
+  glossary.unshift(existing?{...existing,...item}:item);
+
+  if(markedWords.includes(item.text)){
+    markedWords=markedWords.filter(x=>x!==item.text);
+  }else{
+    markedWords.unshift(item.text);
+  }
+
+  localStorage.setItem("hsk3Glossary",JSON.stringify(glossary));
+  localStorage.setItem("hsk3MarkedWords",JSON.stringify(markedWords));
+  renderGlossary();
+  renderExercise();
+}
+function checkAnswers(){const selects=[...document.querySelectorAll(".answer-select")];let total=0,ok=0;selects.forEach(sel=>{const ans=sel.dataset.answer; if(!ans)return; total++; sel.classList.remove("correct","wrong"); if(sel.value===ans){ok++; sel.classList.add("correct")} else if(sel.value){sel.classList.add("wrong")}});const box=document.getElementById("checkResult");box.textContent=`Resultado: ${ok} de ${total} correctas.`;box.style.display="block"}
+function toggleAnswer(){const box=document.getElementById("answerBox");box.style.display=box.style.display==="block"?"none":"block"}function toggleGlossary(){document.getElementById("glossaryCard").classList.toggle("hidden")}
+function clearGlossary(){glossary=[];markedWords=[];localStorage.removeItem("hsk3Glossary");localStorage.removeItem("hsk3MarkedWords");renderGlossary();renderExercise()}function renderGlossary(){const list=document.getElementById("glossaryList");if(!glossary.length){list.innerHTML='<p class="empty">Todavía no has tocado palabras.</p>';return}list.innerHTML=glossary.map(g=>`<div class="glossary-item ${markedWords.includes(g.text)?"marked":""}"><strong>${g.text}</strong><button class="sound-btn" onclick='speakChinese(${JSON.stringify(g.text)})'>🔊</button><div class="pinyin">${g.pinyin||""}</div><div>${g.translation||""}</div></div>`).join("")}
+
+function cleanGlossary(){return glossary.filter(g=>g.text&&g.pinyin&&g.translation)}
+function shuffle(arr){
+  const copy=[...arr];
+  for(let i=copy.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+  return copy;
+}
+function speakChinese(text){
+  if(!text || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-CN";
+  u.rate=0.78;
+  u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+function openGlossaryQuiz(){
+  document.getElementById("lessonScreen").classList.remove("active");
+  document.getElementById("exerciseScreen").classList.remove("active");
+  document.getElementById("flashcardScreen").classList.remove("active");
+  document.getElementById("quizScreen").classList.add("active");
+  resetGlossaryQuiz();
+}
+function closeGlossaryQuiz(){
+  document.getElementById("quizScreen").classList.remove("active");
+  document.getElementById("exerciseScreen").classList.add("active");
+}
+function setQuizDirection(dir){quizDirection=dir;resetGlossaryQuiz()}
+function toggleQuizPinyin(){quizShowPinyin=!quizShowPinyin;renderQuizQuestion()}
+function resetGlossaryQuiz(){
+  const items=cleanGlossary();
+  quizIndex=0;
+  quizCorrect=0;
+  currentQuizItem=null;
+  quizAnswered=false;
+  quizPool=shuffle(items);
+  nextQuizQuestion();
+}
+function nextQuizQuestion(){
+  const items=cleanGlossary();
+  const status=document.getElementById("quizStatus");
+  const question=document.getElementById("quizQuestion");
+  const options=document.getElementById("quizOptions");
+  if(items.length<4){
+    status.textContent=`Necesitas mínimo 4 palabras en el glosario. Llevas ${items.length}.`;
+    question.innerHTML="";
+    options.innerHTML="";
+    return;
+  }
+  if(quizPool.length===0){
+    status.textContent=`Juego terminado. Practicaste ${quizIndex} palabras sin repetir. Correctas: ${quizCorrect}.`;
+    question.innerHTML=`<div>🏆 Terminaste todas las palabras del glosario.<div class="quiz-sub">Presiona “Reiniciar juego” para volver a practicar.</div></div>`;
+    options.innerHTML="";
+    currentQuizItem=null;
+    return;
+  }
+  quizIndex++;
+  quizAnswered=false;
+  currentQuizItem=quizPool.pop();
+  renderQuizQuestion();
+}
+function renderQuizQuestion(){
+  const items=cleanGlossary();
+  const status=document.getElementById("quizStatus");
+  const question=document.getElementById("quizQuestion");
+  const options=document.getElementById("quizOptions");
+  if(items.length<4||!currentQuizItem)return;
+  status.textContent=`Palabras acumuladas: ${items.length} · Pregunta ${quizIndex} de ${items.length} · Correctas: ${quizCorrect}`;
+  if(quizDirection==="zh-es"){
+    question.innerHTML=`<div><div>${currentQuizItem.text} <button class="sound-btn" onclick='speakChinese(${JSON.stringify(currentQuizItem.text)})'>🔊</button></div>${quizShowPinyin?`<div class="quiz-sub">${currentQuizItem.pinyin||""}</div>`:""}</div>`;
+  }else{
+    question.innerHTML=`<div>${currentQuizItem.translation}<div class="quiz-sub"><button class="sound-btn" onclick='speakChinese(${JSON.stringify(currentQuizItem.text)})'>🔊 Escuchar chino</button></div></div>`;
+  }
+  const distractors=shuffle(items.filter(x=>x.text!==currentQuizItem.text)).slice(0,3);
+  const choices=shuffle([currentQuizItem,...distractors]);
+  options.innerHTML=choices.map(opt=>{
+    const label=quizDirection==="zh-es"
+      ? opt.translation
+      : `${opt.text}${quizShowPinyin?`<div class="quiz-sub">${opt.pinyin||""}</div>`:""}`;
+    const isCorrect=opt.text===currentQuizItem.text ? "true" : "false";
+    return `<button class="quiz-option" data-correct="${isCorrect}" onclick='checkQuizAnswer(this,${JSON.stringify(opt.text)})'>${label}</button>`;
+  }).join("");
+}
+function checkQuizAnswer(btn,text){
+  if(quizAnswered || !currentQuizItem) return;
+  quizAnswered=true;
+  const buttons=[...document.querySelectorAll(".quiz-option")];
+  buttons.forEach(b=>b.disabled=true);
+  if(text===currentQuizItem.text){
+    btn.classList.add("correct");
+    quizCorrect++;
+  }else{
+    btn.classList.add("wrong");
+    buttons.forEach(b=>{if(b.dataset.correct==="true")b.classList.add("correct")});
+  }
+  document.getElementById("quizStatus").textContent=`Palabras acumuladas: ${cleanGlossary().length} · Pregunta ${quizIndex} de ${cleanGlossary().length} · Correctas: ${quizCorrect}`;
+  setTimeout(nextQuizQuestion,1100);
+}
+
+function openFlashcards(){
+  document.getElementById("lessonScreen").classList.remove("active");
+  document.getElementById("exerciseScreen").classList.remove("active");
+  document.getElementById("quizScreen").classList.remove("active");
+  document.getElementById("flashcardScreen").classList.add("active");
+  resetFlashcards();
+}
+function closeFlashcards(){
+  document.getElementById("flashcardScreen").classList.remove("active");
+  document.getElementById("exerciseScreen").classList.add("active");
+}
+function resetFlashcards(){
+  flashcardPool=shuffle(cleanGlossary());
+  flashcardIndex=0;
+  flashcardFlipped=false;
+  renderFlashcard();
+}
+function renderFlashcard(){
+  const status=document.getElementById("flashcardStatus");
+  const box=document.getElementById("flashcardBox");
+  const items=cleanGlossary();
+  if(items.length===0){
+    status.textContent="Todavía no hay palabras en el glosario.";
+    box.innerHTML="Toca palabras del ejercicio para agregarlas aquí.";
+    return;
+  }
+  if(flashcardPool.length===0){
+    flashcardPool=shuffle(items);
+    flashcardIndex=0;
+  }
+  const item=flashcardPool[flashcardIndex % flashcardPool.length];
+  status.textContent=`Tarjeta ${flashcardIndex+1} de ${flashcardPool.length} · Palabras acumuladas: ${items.length}`;
+  if(!flashcardFlipped){
+    box.innerHTML=`<div><div>${item.text}</div><div class="flashcard-note">Presiona “Voltear” para ver el español.</div></div>`;
+  }else{
+    box.innerHTML=`<div><div>${item.text}</div><div class="quiz-sub">${item.pinyin||""}</div><div class="flashcard-back">${item.translation||""}</div></div>`;
+  }
+}
+function flipFlashcard(){
+  if(!cleanGlossary().length) return;
+  flashcardFlipped=!flashcardFlipped;
+  renderFlashcard();
+}
+function nextFlashcard(){
+  if(!cleanGlossary().length) return;
+  flashcardIndex=(flashcardIndex+1)%flashcardPool.length;
+  flashcardFlipped=false;
+  renderFlashcard();
+}
+function speakCurrentFlashcard(){
+  if(!flashcardPool.length) return;
+  const item=flashcardPool[flashcardIndex % flashcardPool.length];
+  if(item) speakChinese(item.text);
+}
+
+renderGlossary();
+</script>
+</body>
+</html>
